@@ -19,21 +19,15 @@ const connectDB = require('./utils/db');
 connectDB();
 
 const Contact = require('./models/contact');
+const authenticate = require('./middleware/auth');
+
+// Apply authentication middleware to all routes below
+app.use(authenticate);
 
 // Get all contacts from MongoDB
 app.get('/contacts', async (req, res) => {
   try {
     const contacts = await Contact.find();
-    res.status(200).json(contacts);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Server error' });
-  }
-});
-// Get contacts where isRead is true
-app.get('/contacts/isRead', async (req, res) => {
-  try {
-    const contacts = await Contact.find({ isRead: true });
     res.status(200).json(contacts);
   } catch (err) {
     console.error(err);
